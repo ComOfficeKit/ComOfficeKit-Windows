@@ -1,0 +1,33 @@
+# The samples consume ComOfficeKit as you would: the package from this repository's release,
+# through packages/ and Samples/nuget.config. This builds every one of them for each published
+# release, on a GitHub-hosted Windows runner.
+name: Samples
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag: { description: "Release tag, such as v1.0.0", required: true }
+permissions:
+  contents: read
+jobs:
+  samples:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+      - name: Fetch the release's package
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.inputs.tag || github.event.release.tag_name }}
+        run: Scripts/fetch-nupkg.ps1 -Tag $env:TAG
+      - name: Build the samples
+        shell: pwsh
+        run: |
+          foreach ($sample in Get-ChildItem Samples -Directory) {
+            dotnet build $sample.FullName -c Release -nologo
+            if ($LASTEXITCODE -ne 0) { throw "$($sample.Name) does not build" }
+          }

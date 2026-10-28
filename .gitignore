@@ -1,0 +1,7 @@
+packages/
+bin/
+obj/
+*.nupkg
+.vs/
+*.user
+.DS_Store

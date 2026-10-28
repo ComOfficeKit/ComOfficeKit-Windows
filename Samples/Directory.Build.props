@@ -1,0 +1,16 @@
+<Project>
+  <!--
+    Every sample takes ComOfficeKit from packages/ at the repository's root (Scripts/fetch-nupkg.ps1
+    puts a release's package there; nuget.config here makes it a package source), at the highest
+    version found there, prerelease included. Pass -p:ComOfficeKitVersion=<version> to pin one.
+  -->
+  <PropertyGroup>
+    <ComOfficeKitVersion Condition="'$(ComOfficeKitVersion)' == ''">*-*</ComOfficeKitVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PlatformTarget>x64</PlatformTarget>
+    <!-- Built for .NET 8, the oldest the library supports; RollForward lets a sample run on a newer
+         runtime when .NET 8 is not installed. -->
+    <RollForward>Major</RollForward>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- WPF is part of .NET's Windows desktop: nothing beyond ComOfficeKit is referenced. -->
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>SampleWpfPreview</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ComOfficeKit" Version="$(ComOfficeKitVersion)" />
+  </ItemGroup>
+</Project>
