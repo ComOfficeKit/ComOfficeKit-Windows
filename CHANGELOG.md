@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.1.0
+
+The document model is no longer a preview. From this version it keeps to semantic versioning with the
+rest of the API: a 1.x version adds to it, and nothing your code compiles against in
+`ComOfficeKit.Model` is removed or changed before 2.0. It also gains the editing that ComOfficeKit for
+Apple platforms had and it lacked. See [The document model](docs/object-model.md).
+
+- **Word pictures:** `WordSceneEditor.InsertInlineImage` puts a picture, given as its bytes, at a
+  position in the body, a table, a header, a footer or a note. `WordDocument.GetImageData` and
+  `GetFloatingImageData` read a picture's bytes.
+- **Conditional formats:** `WorkbookSceneEditor.ReplacingConditionalRules` sets a sheet's rules.
+- **Charts:** `WorkbookSceneEditor.InsertingChart` inserts a chart of a range, made as Excel makes one
+  from a selection.
+- **Slides from a layout:** `Presentation.GetLayouts` reads the deck's layouts, `GetLayoutChoices` and
+  `GetDefaultLayoutChoice` give those New Slide offers and uses, and `PresentationSceneEditor.Inserting`
+  inserts the slide New Slide makes from one.
+
+Fixed:
+
+- A link in a header, a footer, a footnote or an endnote lost its address on save when it was put there
+  with `InsertHyperlink`, or when its paragraph was edited, and so did a link in an edited text box.
+  They keep it now.
+- A picture in a footnote or an endnote is shown, and a link there has its address: both are now read
+  through the notes' own relationships. Before, such a picture was never shown.
+
 ## 1.0.0
 
 The first release of ComOfficeKit for Windows, for .NET 8 and later on Windows x64. From this version

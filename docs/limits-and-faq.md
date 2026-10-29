@@ -2,8 +2,9 @@
 
 ## What this version does not do
 
-- **The document model is a preview.** It does not yet insert pictures, add sheets, charts or shapes,
-  or undo an edit ([The document model](object-model.md#not-in-this-preview)).
+- **The document model** does not add sheets or slide shapes, put a picture in a text box, read the bytes
+  of a picture on a sheet or a slide, or undo an edit
+  ([The document model](object-model.md#what-the-model-does-not-do)).
 - **No printing to a printer**, and no UI control: the samples show how to put pages on screen.
 - **Windows x64 only**, .NET 8 or later. Not .NET Framework, not .NET on macOS or Linux.
 - **PDF** is not written as PDF/A or tagged PDF, and is not encrypted, signed or given form fields

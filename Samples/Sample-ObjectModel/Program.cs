@@ -1,4 +1,4 @@
-// Edits a report, a workbook and a deck through the document model (ComOfficeKit.Model, a preview),
+// Edits a report, a workbook and a deck through the document model (ComOfficeKit.Model),
 // saves them, then opens each saved file again and prints what it holds.
 //
 //   dotnet run -- <output folder>

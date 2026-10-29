@@ -53,15 +53,15 @@ for `win-x64`; an Arm64 process fails at the first call with `PlatformNotSupport
 | Type | What it is |
 |---|---|
 | `Document` | an open file. `Open(path)`, `Open(stream, format)`, `CreateBlank(format, path)`; `Kind`, `Format`, `SourcePath`, `PageCount`, `RenderPage`, `ExportPdf`, `Save`, `SaveAs`, `Dispose` |
-| `WordDocument` | a `.docx`: `GetText()`, `ReplaceAll(find, replacement)`, and the static `Compare(original, revised, destination)`. The model: `GetScene`, `GetBody`, `BodyCount`, `GetComments`, `CommentCount`, `EditComment`, `SetCommentResolved`, `SceneEditor`, `Caret`, `SelectionAnchor`, `ModelRevision` |
+| `WordDocument` | a `.docx`: `GetText()`, `ReplaceAll(find, replacement)`, and the static `Compare(original, revised, destination)`. The model: `GetScene`, `GetBody`, `BodyCount`, `GetComments`, `CommentCount`, `EditComment`, `SetCommentResolved`, `GetImageData`, `GetFloatingImageData`, `SceneEditor`, `Caret`, `SelectionAnchor`, `ModelRevision` |
 | `Spreadsheet` | a workbook: `SheetNames`, `ActiveSheet`, `GetCellText`, `GetCellInput`, `SetCellInput`. The model: `GetWorkbook`, `GetSheet`, `GetCells`, `GetCellCount`, `SceneEditor`, `SaveSync`, `ModelRevision` |
-| `Presentation` | a deck: `SlideCount`. The model: `GetSlides`, `GetSlide`, `SceneEditor`, `ModelRevision` |
+| `Presentation` | a deck: `SlideCount`. The model: `GetSlides`, `GetSlide`, `GetLayouts`, `GetLayoutChoices`, `GetDefaultLayoutChoice`, `SceneEditor`, `ModelRevision` |
 | `PageImage` | a rendered page: `Width`, `Height`, `Stride`, `Dpi`, `Pixels` (BGRA32), `SavePng` |
 | `License` | `Activate`, `ActivateFromFile`, `Configure`, `Deactivate`, `State`, `LicensedTo`, `Expires`, `CheckUnlocked` |
 | `Engine` | `Version`: the native engine's version |
 
 The members marked "the model" read and edit a document's content through the records and commands
-in `ComOfficeKit.Model`, a preview: see [The document model](object-model.md).
+in `ComOfficeKit.Model`: see [The document model](object-model.md).
 
 Errors are `ComOfficeKitException` with an `ErrorKind`, and `LicenseException` with a `LicenseError`;
 see [Errors and threading](errors-and-threading.md).

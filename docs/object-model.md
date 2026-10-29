@@ -5,8 +5,8 @@ The rest of the API works on whole documents. The document model, in the namespa
 sheets, cells and formats, a deck's slides, shapes and text. You read it as records, and change it with
 commands that the engine applies.
 
-> **Preview.** The model is a preview in 1.0.0: its types and members can still change in a 1.x version.
-> The rest of the API keeps to semantic versioning, so nothing you compile against there changes before 2.0.
+> **Versioning.** Since 1.1.0 the model keeps to semantic versioning, as the rest of the API does: a 1.x
+> version adds to it, and nothing you compile against is removed or changed before 2.0.
 
 [Sample-ObjectModel](../Samples/Sample-ObjectModel) edits a report, a workbook and a deck through the
 model, saves them, and reads the saved files back.
@@ -18,9 +18,9 @@ The types carry the names of ComOfficeKit for Apple platforms, capitalised as .N
 
 | | Reads | Counts | In parts |
 |---|---|---|---|
-| `WordDocument` | `GetScene()`, the whole document; `GetBody()`, its paragraphs and tables; `GetComments()` | `BodyCount`, `CommentCount` | `GetBody(from, count)`, `GetComments(from, count)` |
+| `WordDocument` | `GetScene()`, the whole document; `GetBody()`, its paragraphs and tables; `GetComments()`; `GetImageData(paragraphId, runId)` and `GetFloatingImageData(paragraphId, index)`, a picture's bytes | `BodyCount`, `CommentCount` | `GetBody(from, count)`, `GetComments(from, count)` |
 | `Spreadsheet` | `GetWorkbook()`; `GetSheet(name)`; `GetCells(sheet)`, the cells that hold something; `GetCells(sheet, "A1:D20")` | `GetCellCount(sheet)` | `GetCells(sheet, from, count)` |
-| `Presentation` | `GetSlides()`, `GetSlide(index)` | `SlideCount` | `GetSlides(from, count)` |
+| `Presentation` | `GetSlides()`, `GetSlide(index)`; `GetLayouts()`, the deck's layouts | `SlideCount` | `GetSlides(from, count)` |
 
 **A read is a snapshot.** It returns records with `init`-only properties, compared by value, and an
 edit does not change them: read again after one. Each document has a `ModelRevision`, a number that
@@ -110,13 +110,20 @@ find again after each edit; the sample shows how.
 | Tables | `InsertTable`, `InsertTableRow`, `InsertTableColumn`, `DeleteTableRow`, `DeleteTableColumn` |
 | Fields and notes | `InsertHyperlink`, `InsertFootnote`, `InsertEndnote`, `InsertCaption`, `InsertPageNumber`, `InsertTableOfContents`, `UpdateTableOfContents` |
 | Layout | `InsertSectionBreak`, `SetPageMargins`, `SetPageSize`, `EditHeaderFooter`, `InsertTextBox` |
-| Pictures | `SetInlineImageSize`, `DeleteInlineImageRun`, `SetFloatingImageGeometry`, `RemoveFloatingImage` |
+| Pictures | `InsertInlineImage`, from the picture's bytes; `SetInlineImageSize`, `DeleteInlineImageRun`, `SetFloatingImageGeometry`, `RemoveFloatingImage` |
 | Tracked changes | `ResolvingRevisions`: accept or reject |
 | Questions, which change nothing | `RunFormatting`, `SelectedText`, `FindMatches`, `HasTableOfContents`, `CanInsertNote`, `TableSpanned`, `TextColumnWidthTwips` |
 
 Comments are edited on the document itself: `EditComment(id, text)` and `SetCommentResolved(id,
 resolved)`, with the ids `GetComments()` gives. A length whose name ends in `Twips` is in twentieths of
 a point, and one ending in `Pt` in points.
+
+**Pictures.** `InsertInlineImage(data, widthPt, heightPt, at, altText)` puts a picture inline at a
+position in the body, a table, a header, a footer or a note, and the caret after it; the save writes it
+into that part. A text box takes none. The bytes are PNG, JPEG, GIF, BMP or TIFF, at most 64 MB, and
+each side is above 0 and at most 1,584 points. A run's `Image` describes its picture without the bytes:
+`GetImageData(paragraphId, runId)` reads them, and `GetFloatingImageData(paragraphId, index)` reads a
+floating picture's.
 
 ## Workbooks
 
@@ -154,8 +161,9 @@ book.SceneEditor.SettingFormat(new CellRange { Start = At(2, 2), End = At(2, 4) 
 |---|---|
 | Values | `SettingCellValue` (a `CellValue`, and a formula or null), `RemovingCells` |
 | Formats | `SettingFormat` on a range, with a `CellFormatChange`: the members you set (`Font`, `Fill`, `Borders`, `NumberFormat`, `Alignment`) are set, those whose `Clear…` member you set are cleared, and the rest are kept. On one cell: `SettingNumberFormat`, `SettingFontTrait`, `SettingFontFamily`, `SettingFontSize`, `SettingFontColor`, `SettingFillColor`, `SettingHorizontalAlignment`, `ClearingFormat` |
+| Conditional formats | `ReplacingConditionalRules(rules, sheetIndex)`: the sheet's rules, all of them, in the order of their `Priority`. A rule read from the sheet and given back as it was keeps what the file held of it |
 | Rows, columns and sheets | `InsertingRows`, `InsertingColumns`, `DeletingRows`, `DeletingColumns`, `SettingColumnWidth`, `RenamingSheet`, `RemovingSheet` |
-| Tables, charts and drawings | `InsertingTable` (`DefaultAuthoredTableStyle()` gives Excel's default look), `MovingChart`, `RemovingChart`, `MovingDrawing`, `RemovingDrawing` |
+| Tables, charts and drawings | `InsertingTable` (`DefaultAuthoredTableStyle()` gives Excel's default look); `InsertingChart`, a chart of a range, made as Excel makes one from a selection; `MovingChart`, `RemovingChart`, `MovingDrawing`, `RemovingDrawing` |
 
 `GetSheet` and `GetCells` read a hidden sheet too, whose cells `GetCellText` and `GetCellInput` refuse.
 
@@ -182,11 +190,15 @@ deck.SceneEditor.ReplacingNotes(0, "Open with the regional figures.");
 | Text | `ReplacingText`, one run's text; `ReplacingRuns`, a paragraph's runs, keeping the paragraph's properties; `ReplacingParagraphs`, all of a shape's paragraphs |
 | Formatting | `ReplacingFormatting`, a run's, with a `TextRunFormattingChange`; `ReplacingProperties`, a paragraph's alignment, level, bullet or line spacing, with a `ParagraphPropertiesChange` |
 | Shapes | `ReplacingFrame`: position, size and rotation; `ReplacingStyle`: fill and outline, with a `SlideShapeStyleChange`, or a table cell's, with a `TableCellStyleChange` |
-| Slides | `ReplacingNotes`, the speaker notes; `Duplicating`, a copy after the slide; `Deleting`, never the deck's last slide |
+| Slides | `ReplacingNotes`, the speaker notes; `Inserting(layout, at)`, the slide New Slide makes from one of `GetLayouts()`, placed at `at`; `Duplicating`, a copy after the slide; `Deleting`, never the deck's last slide |
 
-## Not in this preview
+`GetLayoutChoices(afterSlide)` lists the layouts New Slide offers after a slide, as PowerPoint lists
+them, and `GetDefaultLayoutChoice(afterSlide)` the one it uses: each an index into `GetLayouts()`.
+
+## What the model does not do
 
 - No undo or redo: a command is applied when it is called.
-- **Word:** no command inserts a picture.
-- **Workbooks:** no command adds a sheet or a chart; conditional formats are read, not edited.
-- **Presentations:** no command adds a shape, or a slide other than a copy.
+- **Word:** a picture does not go in a text box.
+- **Workbooks:** no command adds a sheet. A conditional format of the kind `Unsupported` (Top 10, above
+  average, a formula, a date) is kept or left out, not made or changed. A picture's bytes are not read.
+- **Presentations:** no command adds a shape. A picture's bytes are not read.

@@ -6,9 +6,9 @@ a document's text, compare two documents, read and write cells, and edit paragra
 through a document model — in your process, with a native engine that ships inside the package. No
 Microsoft Office, no LibreOffice, no server.
 
-> **Current release: 1.0.0** — what changed: [CHANGELOG](CHANGELOG.md). Its package,
-> `ComOfficeKit.1.0.0.nupkg` (28.4 MB), is attached to
-> [the release](https://github.com/ComOfficeKit/ComOfficeKit-Windows/releases/tag/v1.0.0); `Scripts/fetch-nupkg.ps1 -Tag v1.0.0`
+> **Current release: 1.1.0** — what changed: [CHANGELOG](CHANGELOG.md). Its package,
+> `ComOfficeKit.1.1.0.nupkg` (28.4 MB), is attached to
+> [the release](https://github.com/ComOfficeKit/ComOfficeKit-Windows/releases/tag/v1.1.0); `Scripts/fetch-nupkg.ps1 -Tag v1.1.0`
 > puts it in `packages/` for the samples.
 
 ```csharp
@@ -29,13 +29,13 @@ document.ExportPdf("report.pdf");
 | **Pages** | laid out as Word paginates | the sheet's printed pages, from its page setup | one per slide |
 | **Render** | any page as a BGRA32 image, 24 to 600 dpi; PNG | the active sheet's pages | any slide |
 | **PDF** | every page, text kept as text | the active sheet's pages | the slides that are not hidden |
-| **Read** | the body's text; paragraphs, runs, tables and comments as records (preview) | each cell as it shows, or its formula; sheets, cells and formats as records (preview) | the slide count; slides, shapes and text as records (preview) |
-| **Edit** | replace text everywhere, keeping its formatting; text, formatting, paragraphs and tables (preview) | type into a cell as in Excel; what depends on it recalculates; formats, rows, columns and tables (preview) | text and its formatting, shapes, notes; copy and delete slides (preview) |
+| **Read** | the body's text; paragraphs, runs, tables and comments as records; a picture's bytes | each cell as it shows, or its formula; sheets, cells and formats as records | the slide count; slides, shapes and text as records; the deck's layouts |
+| **Edit** | replace text everywhere, keeping its formatting; text, formatting, paragraphs, tables and pictures | type into a cell as in Excel; what depends on it recalculates; formats, conditional formats, rows, columns, tables and charts | text and its formatting, shapes, notes; insert a slide from a layout, copy and delete slides |
 | **Compare** | two documents, written as tracked changes | — | — |
 | **Save** | `.docx`, carrying unchanged parts over | `.xlsx`, `.xlsm`, `.csv`, `.tsv` | `.pptx` |
 
 The whole public API is in [the API overview](docs/getting-started.md#the-api-at-a-glance), and the
-document model, a preview, in [The document model](docs/object-model.md).
+document model in [The document model](docs/object-model.md).
 
 ## Requirements
 
@@ -56,10 +56,10 @@ document model, a preview, in [The document model](docs/object-model.md).
 | [Licensing](docs/licensing.md) | keys and licence files, where an activation is kept, the errors |
 | [Rendering and PDF](docs/rendering-and-pdf.md) | page images, DPI and sizes, showing pages in WPF and WinUI, PDF |
 | [Spreadsheets](docs/spreadsheets.md) | sheets, cell names, reading and typing into cells, CSV |
-| [The document model](docs/object-model.md) | paragraphs, cells and slides as records, and the commands that edit them (preview) |
+| [The document model](docs/object-model.md) | paragraphs, cells and slides as records, and the commands that edit them |
 | [Errors and threading](docs/errors-and-threading.md) | what is thrown when, threads, disposal, streams |
 | [Deployment](docs/deployment.md) | the native files, publishing, servers and services |
-| [Limits and FAQ](docs/limits-and-faq.md) | what the first version does not do |
+| [Limits and FAQ](docs/limits-and-faq.md) | what this version does not do |
 
 ## Samples
 
