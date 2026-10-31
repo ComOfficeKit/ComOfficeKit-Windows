@@ -18,7 +18,7 @@
 - `Compare` compares body paragraphs and table cells, word by word. Not compared: formatting, headers,
   footers, footnotes, text boxes, pictures, comments. A document's own tracked changes are compared as
   accepted, and `CompareResult` says when there were any.
-- WMF pictures are not drawn. EMF pictures are.
+- WMF and EMF pictures are drawn, as vectors: a WMF is converted to EMF first.
 
 **Spreadsheets**
 - About 105 of Excel's functions are calculated; dynamic arrays are not ([Spreadsheets](spreadsheets.md)).

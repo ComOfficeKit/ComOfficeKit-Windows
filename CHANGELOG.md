@@ -1,5 +1,38 @@
 # Changelog
 
+## 1.3.0
+
+No change to the API: this version changes what the engine draws and what it keeps. There was no 1.2.0
+release for Windows; its changes are in this one.
+
+Drawn as Word, Excel and PowerPoint show them, on screen, in page images and in PDF:
+
+- **Word SmartArt and VML shape groups**, each shape with its outline, fill and text. Before, they took
+  no room, and what followed them moved up.
+- **WMF pictures**, converted to EMF and drawn as vectors. Only EMF was drawn before.
+- **An embedded object** (`<w:object>`) shows its preview picture: in line with the text, or floating
+  when its shape is positioned. It was skipped.
+- **Word character styles** (`<w:rStyle>`): a hyperlink is blue and underlined, and a table of contents'
+  entries take their TOC styles. Only paragraph styles were read, so links came out black and plain.
+- **East Asian text in its East Asian font.** Each character takes its run's Latin or East Asian font,
+  as Word does, and fonts named only through the document's theme are read. A run kept one family before.
+- **Excel cell text:** a cell with Wrap Text is broken into lines that fit it, and at its line breaks,
+  and placed by its vertical alignment; a rich-text cell keeps each run's font, size and style; and a
+  number format's colour (`[Red]`) colours the value.
+- **Slide charts** take the deck's theme colours, each point's own colour, their data labels and legend,
+  and the plot's manual layout. A theme-coloured series fell back to a default palette.
+- **A slide table without a table style** draws only its cells' own fills and borders, as tables from
+  Google Slides and WPS expect. It was drawn in a built-in style, often in the deck's blue.
+
+Kept when the document model edits a Word table:
+
+- `InsertTableRow`, `InsertTableColumn`, `DeleteTableRow` and `DeleteTableColumn` keep the table's own
+  properties: its style, alignment, indent and cell margins, and the borders its style gives it. A table
+  of fixed width takes the new grid's width; a width given as a share of the page stays a share.
+- `DeleteRange` deletes ranges it refused: over more than one paragraph of a cell, a header, a footer
+  or a note; from one cell into another, or into or out of a table; and over a table. Cells and rows
+  stay, and a cell the range empties keeps one empty paragraph.
+
 ## 1.1.0
 
 The document model is no longer a preview. From this version it keeps to semantic versioning with the

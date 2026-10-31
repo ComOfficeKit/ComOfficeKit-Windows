@@ -6,9 +6,9 @@ a document's text, compare two documents, read and write cells, and edit paragra
 through a document model — in your process, with a native engine that ships inside the package. No
 Microsoft Office, no LibreOffice, no server.
 
-> **Current release: 1.1.0** — what changed: [CHANGELOG](CHANGELOG.md). Its package,
-> `ComOfficeKit.1.1.0.nupkg` (28.4 MB), is attached to
-> [the release](https://github.com/ComOfficeKit/ComOfficeKit-Windows/releases/tag/v1.1.0); `Scripts/fetch-nupkg.ps1 -Tag v1.1.0`
+> **Current release: 1.3.0** — what changed: [CHANGELOG](CHANGELOG.md). Its package,
+> `ComOfficeKit.1.3.0.nupkg` (28.5 MB), is attached to
+> [the release](https://github.com/ComOfficeKit/ComOfficeKit-Windows/releases/tag/v1.3.0); `Scripts/fetch-nupkg.ps1 -Tag v1.3.0`
 > puts it in `packages/` for the samples.
 
 ```csharp
@@ -91,7 +91,7 @@ publishes a free evaluation key, so you can try the whole SDK without signing up
    ship, sell or distribute anything built on an evaluation key. The
    [Service Terms](https://comofficekit.com/service-terms/) and [LICENSE.md](LICENSE.md) apply.
 4. **Buying a licence.** For a production licence or a quote, email our sales team at
-   **support@comofficekit.com**.
+   **sales@comofficekit.com**.
 
 ## Support
 
