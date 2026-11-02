@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Document viewer</title>
+<style>
+  body { margin: 0; font: 15px system-ui, sans-serif; background: #e9ecef; color: #1d2329; }
+  header { position: sticky; top: 0; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center;
+           padding: 10px 16px; background: #fff; border-bottom: 1px solid #ced4da; }
+  #note { color: #5c6670; }
+  main { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 16px; }
+  main img { display: block; max-width: 100%; object-fit: contain; background: #fff; box-shadow: 0 1px 4px rgba(0, 0, 0, .2); }
+  main img.waiting { width: min(100%, var(--page-width, 816px)); aspect-ratio: var(--page-shape, 8.5 / 11); }
+</style>
+</head>
+<body>
+<header>
+  <input type="file" id="picker" accept=".docx,.xlsx,.xlsm,.pptx,.csv,.tsv">
+  <a id="pdf" target="_blank" hidden>Open as PDF</a>
+  <span id="note">Choose a document to view.</span>
+</header>
+<main id="pages"></main>
+<script>
+// The document goes to the service once. Each page comes back as an image when it scrolls into view, and the PDF
+// opens in the browser's own viewer.
+const picker = document.getElementById('picker');
+const pdfLink = document.getElementById('pdf');
+const note = document.getElementById('note');
+const pageList = document.getElementById('pages');
+let current = null;
+let latest = 0;
+
+picker.addEventListener('change', async () => {
+  const chosen = picker.files[0];
+  if (!chosen) return;
+  // Each choice is numbered, so an answer that arrives after a later choice is set aside.
+  const choice = ++latest;
+  if (current) fetch(`documents/${current}`, { method: 'DELETE' }).catch(() => {});
+  current = null;
+  pageList.replaceChildren();
+  pageList.style.removeProperty('--page-width');
+  pageList.style.removeProperty('--page-shape');
+  pdfLink.hidden = true;
+  note.textContent = `Opening ${chosen.name}…`;
+  let response = null;
+  let opened = null;
+  try {
+    response = await fetch(`documents?name=${encodeURIComponent(chosen.name)}`, { method: 'POST', body: chosen });
+    opened = await response.json().catch(() => null);
+  } catch {
+    // No answer at all: the service is down, or it closed the connection, as it can for a file past its size limit.
+  }
+  if (choice !== latest) {
+    if (response?.ok && opened) fetch(`documents/${opened.id}`, { method: 'DELETE' }).catch(() => {});
+    return;
+  }
+  if (!response?.ok || !opened) {
+    // An answer from ASP.NET itself or a proxy carries no detail, and over HTTP/2 no status text either.
+    const reason = !response ? 'the service did not answer.'
+      : opened?.detail ?? (response.status === 413 ? 'it is larger than the service accepts.' : `the service answered ${response.status}.`);
+    note.textContent = `${chosen.name} did not open: ${reason}`;
+    return;
+  }
+  current = opened.id;
+  const fonts = opened.fonts.map(font => `${font.requested} (drawn in ${font.used})`).join(', ');
+  note.textContent = `${chosen.name}: ${opened.pages} page${opened.pages === 1 ? '' : 's'}`
+    + (fonts ? `. Fonts the server lacks: ${fonts}` : '');
+  pdfLink.href = `documents/${opened.id}/pdf`;
+  pdfLink.hidden = false;
+  // Sharp on high-density screens: more dots per inch, the same size on the screen.
+  const dpi = Math.round(96 * Math.min(Math.max(window.devicePixelRatio || 1, 1), 3));
+  for (let page = 1; page <= opened.pages; page++) {
+    const image = new Image();
+    image.className = 'waiting';
+    image.loading = 'lazy';
+    image.alt = `Page ${page}`;
+    image.addEventListener('load', () => {
+      const width = image.naturalWidth * 96 / dpi;
+      image.className = '';
+      image.style.width = `${width}px`;
+      // The pages still on their way wait in this page's size and shape.
+      if (choice === latest) {
+        pageList.style.setProperty('--page-width', `${width}px`);
+        pageList.style.setProperty('--page-shape', `${image.naturalWidth} / ${image.naturalHeight}`);
+      }
+    });
+    image.src = `documents/${opened.id}/pages/${page}?dpi=${dpi}`;
+    pageList.append(image);
+  }
+});
+</script>
+</body>
+</html>

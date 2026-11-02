@@ -1,0 +1,3 @@
+# The image takes publish\ only; the build's own folders hold a second copy of it.
+bin
+obj

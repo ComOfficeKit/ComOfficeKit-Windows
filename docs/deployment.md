@@ -36,13 +36,15 @@ versions, when it is not.
 |---|---|
 | Windows 11, x64 | supported and tested |
 | Windows 10, x64 | expected to work; not yet tested |
-| Windows Server | not yet tested |
+| Windows Server 2022 and 2025, x64 | tested, and in Windows containers: see [Running on a server](servers.md#platforms) |
 | Arm64, x86 | not supported: the engine is x64 only. On Arm64 Windows an x64 process works |
 
 ## Servers and services
 
-The engine needs no desktop and no graphics card: pages are drawn in software. Not yet tested under
-ASP.NET Core or as a Windows service; what to plan for:
+The engine needs no desktop and no graphics card: pages are drawn in software. [Running on a
+server](servers.md) is the whole of it: worker processes, limits on disk, time and memory, fonts,
+Windows containers, and documents in a browser through an ASP.NET service
+(`Samples/Sample-WebViewer`). Not yet tested as a Windows service. What to plan for:
 
 - **PDF** needs nothing more: the engine writes it, with no printer and no Print Spooler service
   ([Rendering and PDF](rendering-and-pdf.md)).
@@ -52,4 +54,5 @@ ASP.NET Core or as a Windows service; what to plan for:
   it. A service runs under its own account: activate under that account, or use
   `LicenseStorage.Memory` and activate at every start ([Licensing](licensing.md)).
 - **Temporary files** go to the account's temporary folder, and only for documents opened from or
-  saved to streams.
+  saved to streams. With `Engine.Configure`, they go to the working directory you give it
+  ([Running on a server](servers.md#at-each-workers-start)).

@@ -6,6 +6,8 @@
 | [Sample-TemplateFill](Sample-TemplateFill) | a console app: fill a Word template's `{{placeholders}}`, build a small invoice workbook, save both |
 | [Sample-WpfPreview](Sample-WpfPreview) | a WPF window that shows a document page by page |
 | [Sample-ObjectModel](Sample-ObjectModel) | a console app: write a report, a workbook and a deck through the document model, save them, read them back |
+| [Sample-ServerWorkers](Sample-ServerWorkers) | a console app: a supervisor and its worker processes convert a folder of documents to PDF, with a Dockerfile for a Windows container ([Running on a server](../docs/servers.md)) |
+| [Sample-WebViewer](Sample-WebViewer) | an ASP.NET service and its page: a document's pages as images, and the document as PDF, in a browser ([Running on a server](../docs/servers.md#showing-documents-in-a-browser)) |
 
 To run one:
 

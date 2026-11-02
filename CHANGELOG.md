@@ -1,5 +1,51 @@
 # Changelog
 
+## 1.4.0
+
+For running on a server: a guide and two samples, a working directory with a quota, cancelling a call,
+and a report of the fonts a document was drawn without. The engine now also loads in the smaller Windows
+Server image.
+
+New in the API:
+
+- **`Engine.Configure(EngineOptions)`**, once in a process, before its first document: `WorkingDirectory`,
+  where documents unpack and keep their pictures while they are open, and `WorkingDirectoryQuota`, the most
+  the engine keeps there at once. An open or a save that would pass the quota throws `ComOfficeKitException`
+  with the new `ErrorKind.LimitExceeded`, and writes nothing. With a working directory, a document's pictures
+  are deleted when the document is disposed.
+- **Cancelling a call.** `Document.Open`, `GetPageCount` (new), `RenderPage`, `ExportPdf`, `Save` and
+  `SaveAs` each have an overload that takes a `CancellationToken`. A cancelled call throws
+  `OperationCanceledException` at its next check and changes nothing: no document opened, no file replaced.
+- **`Document.FontSubstitutions`**: each font family the document asked for that the machine does not have,
+  and the family it was drawn in instead (`FontSubstitution`, with `Requested` and `Used`), once the document
+  has been laid out.
+- **The document model** deletes a table (`DeleteTable`) and moves a table's column border
+  (`MovingTableColumnBorder`).
+
+Where it runs:
+
+- **Windows Server 2022 and 2025** are tested, and Windows containers on the full Windows Server images of
+  2022 and 2025 (`mcr.microsoft.com/windows/server`).
+- **The smaller Windows Server image of 2025** (`mcr.microsoft.com/windows/servercore:ltsc2025`): the engine
+  now loads there. Before, it needed a printing library that image does not have. In the smaller image of
+  2022, documents open, change and save, but page images are not available.
+
+New in `docs/` and `Samples/`:
+
+- **`docs/servers.md`**: running on a server in worker processes, with limits on disk, time and memory,
+  fonts, Windows containers, and showing documents in a browser.
+- **`Samples/Sample-ServerWorkers`**: a supervisor and its worker processes that convert a folder of
+  documents to PDF, with a Dockerfile for a Windows container.
+- **`Samples/Sample-WebViewer`**: a minimal ASP.NET service and its page, which show a document's pages as
+  images and the document as PDF in a browser.
+
+In `Scripts/`:
+
+- `Scripts/fetch-nupkg.ps1 -Tag` no longer needs the GitHub CLI. It asks GitHub's REST API for the
+  release and downloads the package from the release page, and checks its size. Before, it ran `gh`,
+  which nothing said it needed, and stopped where `gh` was not installed. A tag that does not exist
+  still lists the published releases.
+
 ## 1.3.0
 
 No change to the API: this version changes what the engine draws and what it keeps. There was no 1.2.0

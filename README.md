@@ -6,9 +6,9 @@ a document's text, compare two documents, read and write cells, and edit paragra
 through a document model — in your process, with a native engine that ships inside the package. No
 Microsoft Office, no LibreOffice, no server.
 
-> **Current release: 1.3.0** — what changed: [CHANGELOG](CHANGELOG.md). Its package,
-> `ComOfficeKit.1.3.0.nupkg` (28.5 MB), is attached to
-> [the release](https://github.com/ComOfficeKit/ComOfficeKit-Windows/releases/tag/v1.3.0); `Scripts/fetch-nupkg.ps1 -Tag v1.3.0`
+> **Current release: 1.4.0** — what changed: [CHANGELOG](CHANGELOG.md). Its package,
+> `ComOfficeKit.1.4.0.nupkg` (28.6 MB), is attached to
+> [the release](https://github.com/ComOfficeKit/ComOfficeKit-Windows/releases/tag/v1.4.0); `Scripts/fetch-nupkg.ps1 -Tag v1.4.0`
 > puts it in `packages/` for the samples.
 
 ```csharp
@@ -41,7 +41,7 @@ document model in [The document model](docs/object-model.md).
 
 | | |
 |---|---|
-| Windows | Windows 11, x64 |
+| Windows | Windows 11; Windows Server 2022 and 2025. x64 |
 | .NET | .NET 8 or later. The library targets `net8.0` |
 | Process | x64 |
 | Installed on the machine | nothing. The engine and the Visual C++ runtime it needs ship in the package |
@@ -59,6 +59,7 @@ document model in [The document model](docs/object-model.md).
 | [The document model](docs/object-model.md) | paragraphs, cells and slides as records, and the commands that edit them |
 | [Errors and threading](docs/errors-and-threading.md) | what is thrown when, threads, disposal, streams |
 | [Deployment](docs/deployment.md) | the native files, publishing, servers and services |
+| [Running on a server](docs/servers.md) | worker processes, limits on disk, time and memory, fonts, Windows containers, documents in a browser |
 | [Limits and FAQ](docs/limits-and-faq.md) | what this version does not do |
 
 ## Samples
@@ -69,6 +70,8 @@ document model in [The document model](docs/object-model.md).
 | [Sample-TemplateFill](Samples/Sample-TemplateFill) | fill a Word template and a workbook, then save them |
 | [Sample-WpfPreview](Samples/Sample-WpfPreview) | page images in a WPF window |
 | [Sample-ObjectModel](Samples/Sample-ObjectModel) | edit a report, a workbook and a deck through the document model |
+| [Sample-ServerWorkers](Samples/Sample-ServerWorkers) | a supervisor and its worker processes convert a folder of documents to PDF; a Dockerfile for a Windows container |
+| [Sample-WebViewer](Samples/Sample-WebViewer) | an ASP.NET service and its page: a document's pages as images, and the document as PDF, in a browser |
 
 ## Free trial and licence
 

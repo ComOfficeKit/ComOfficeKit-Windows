@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    The server sample (docs/servers.md): a supervisor and its worker processes in one console program.
+    ComOfficeKit comes from packages/, through Samples/nuget.config and Samples/Directory.Build.props.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RollForward>Major</RollForward>
+    <PlatformTarget>x64</PlatformTarget>
+    <IsPackable>false</IsPackable>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="ComOfficeKit" Version="$(ComOfficeKitVersion)" />
+  </ItemGroup>
+</Project>
