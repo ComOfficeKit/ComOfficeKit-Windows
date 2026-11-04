@@ -67,7 +67,7 @@ PDF is written.
 **How the PDF is made.** The engine writes the PDF itself, in your process: no printer, no Print
 Spooler service, no dialog. So:
 
-- It works wherever the rest of ComOfficeKit does, servers included: nothing has to be installed or
+- It works wherever the rest of ComOffice does, servers included: nothing has to be installed or
   running on the machine.
 - Exports of different documents run in parallel, as other calls do ([Errors and
   threading](errors-and-threading.md)). A long document takes a while: export it off your UI thread.

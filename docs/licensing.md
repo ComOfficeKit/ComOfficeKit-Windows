@@ -1,6 +1,6 @@
 # Licensing
 
-ComOfficeKit is licensed per product, quoted and delivered by a sales team. A licence comes as a key
+ComOffice is licensed per product, quoted and delivered by a sales team. A licence comes as a key
 (a string) or a licence file, and the engine verifies it on the machine. **No network is used, at
 activation or ever.**
 
@@ -38,7 +38,7 @@ License.Configure(LicenseStorage.Persistent, "MyApp"); // a name of your own
 
 | Storage | What happens |
 |---|---|
-| `Persistent` | The licence is kept for the current Windows user, encrypted so that only that user on this machine can read it (Windows' data protection, DPAPI). The next start of your application finds it. Another user, or a copy of the file on another machine, reads as not activated. |
+| `Persistent` | On Windows the licence is kept for the current user, encrypted so that only that user on this machine can read it (Windows' data protection, DPAPI); another user, or a copy of the file on another machine, reads as not activated. On Linux it is kept in a file only that user can read (`0600`), not encrypted ([ComOffice on Linux](linux.md#activate)). Either way, the next start of your application finds it. |
 | `Memory` | Nothing is written. The licence lasts until the process ends. Use it when you hold the key yourself and activate at every start, for example in a service. |
 
 `Configure` comes before `Activate`. The name keeps two applications on one machine from sharing an
@@ -88,13 +88,13 @@ A licence can be bound to one application. The application is the .NET assembly 
 | `LicenseError` | Meaning | What to show |
 |---|---|---|
 | `NotActivated` | no licence yet | your licence entry |
-| `InvalidKey` | not a ComOfficeKit licence, or altered since it was issued | "paste the whole key from your licence email" |
+| `InvalidKey` | not a ComOffice licence, or altered since it was issued | "paste the whole key from your licence email" |
 | `WrongProduct` | issued for another product | "check the licence" |
 | `Expired` | the term has ended | "contact sales to renew" |
-| `PlatformMismatch` | the licence does not cover Windows | "contact sales" |
+| `PlatformMismatch` | the licence does not cover this platform, Windows or Linux | "contact sales" |
 | `AppIdMismatch` | the licence is bound to another application | "contact sales" |
 | `FeatureNotLicensed` | the licence does not include this operation | "contact sales" |
-| `VersionNotLicensed` | the licence does not cover this version of ComOfficeKit | "contact sales, or use the version your licence covers" |
+| `VersionNotLicensed` | the licence does not cover this version of ComOffice | "contact sales, or use the version your licence covers" |
 | `NoVerificationKey` | this build cannot verify licences | "contact support"; a release never shows it |
 
 Catch `LicenseException` apart from other errors: it is the one failure a healthy file can produce,

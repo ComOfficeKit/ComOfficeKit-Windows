@@ -1,7 +1,7 @@
-# Running ComOfficeKit on a server
+# Running ComOffice on a server
 
 A server converts documents it did not write, many at a time, with nobody at the screen. This page is how to run
-ComOfficeKit there: in worker processes, each in a folder of its own, with limits on disk and time, and with the fonts
+ComOffice there: in worker processes, each in a folder of its own, with limits on disk and time, and with the fonts
 your documents use.
 
 ## Worker processes, not threads
@@ -30,7 +30,7 @@ License.Activate(licenceKey);                          // a secret the service i
 
 - **`Engine.Configure`** comes first, once, before the first document. It cannot be called again in that process.
 - **The working directory** is where a document unpacks while it is read or saved, where a file is staged before it
-  replaces one, and where a document's pictures stay while it is open. ComOfficeKit's own temporary files go there too.
+  replaces one, and where a document's pictures stay while it is open. ComOffice's own temporary files go there too.
   Give each worker a folder of its own, on a volume with room, that nothing else empties; when a worker ends, its
   supervisor deletes the folder. With a working directory, a document's pictures are deleted when the document is
   disposed.
@@ -40,7 +40,8 @@ License.Activate(licenceKey);                          // a secret the service i
   file's size for a .pptx, at most 26 times across the 1,891 files measured. A save needs that again, and the file's
   size.
 - **The licence** is kept in memory and activated at every start: a container has no lasting storage, and a service's
-  account is not the one that installed it.
+  account is not the one that installed it. On Linux, `LicenseStorage.Persistent` would write the key to a file in
+  that account's home, readable by it and root ([ComOffice on Linux](linux.md), "Activate").
 
 ## Limits on every job
 
@@ -49,7 +50,7 @@ License.Activate(licenceKey);                          // a secret the service i
 | A document that inflates far past its size (a zip bomb) | built in: a package may unpack to 64 MB plus 100 bytes for each of its own bytes, and hold at most 10,000 parts; past that it is refused as `Parse`, before anything is written |
 | Disk | `EngineOptions.WorkingDirectoryQuota` |
 | Time | a `CancellationToken` on the call (below), and the supervisor's own time limit |
-| Memory | the process: a container's memory limit, or a Windows job object, ends a worker that grows past it |
+| Memory | the process: a container's memory limit, a cgroup on Linux, or a Windows job object, ends a worker that grows past it |
 
 ### Cancelling a call
 
@@ -74,12 +75,17 @@ stand-in, so its lines can break and its pages fill differently from the author'
 out, `Document.FontSubstitutions` lists each family it asked for and the one it was drawn in; log it, and install the
 families that keep appearing there.
 
-On Windows the engine uses the fonts installed on the machine; `EngineOptions.FontDirectories` is for other platforms.
+On Windows the engine uses the fonts installed on the machine. On Linux it looks in the folders
+`EngineOptions.FontDirectories` names, then in the two the package carries beside the engine, Carlito and Caladea,
+then in the system's ([ComOffice on Linux](linux.md), "Fonts"); a machine with no fonts of its own still lays
+documents out, in those two.
 
 ## What the engine writes, and where
 
 - Nothing to the console, and no log: the engine prints nothing and keeps no record of the documents it reads.
-- In the working directory: what is described above, and nothing once every document is disposed.
+- In the working directory: what is described above, and nothing once every document is disposed. On Linux the
+  engine also keeps the index of the fonts it found there, `PortableRender/FontIndex`, for every document and the
+  next start.
 - Beside a PDF or a saved file: the new file, staged under a hidden name until it replaces the old one.
 
 ## In a Windows container
@@ -110,6 +116,35 @@ docker run --rm -v C:\documents:C:\in:ro -v C:\converted:C:\out `
   activates it when it starts, as above.
 - **Fonts.** A container has the fonts its image carries and no others. The sample prints the
   `Document.FontSubstitutions` of every document it converts; add the families it names to your image.
+
+## In a Linux container
+
+`Samples/Sample-ServerWorkers` also comes with `Dockerfile.linux`, on Microsoft's .NET 8 runtime image with the
+distribution's libxml2 added. With the release's package in `packages/` at the repository's root ([ComOffice on
+Linux](linux.md), "Add the package and publish"), publish the sample for `linux-x64` beside the Dockerfile, then
+build the image:
+
+```bash
+cd Samples/Sample-ServerWorkers
+dotnet publish -c Release -r linux-x64 --self-contained false -o publish
+docker build -f Dockerfile.linux -t comofficekit-workers .
+```
+
+Run it as on Windows, with a folder of documents, a folder for the PDFs and the folder that holds the licence file,
+each mounted:
+
+```bash
+docker run --rm -v /srv/documents:/in:ro -v /srv/converted:/out \
+  -v /srv/comofficekit:/licence:ro -e COMOFFICEKIT_LICENSE_FILE=/licence/licence.txt \
+  comofficekit-workers /in /out
+```
+
+- **The image** needs nothing else: .NET 8, libxml2, and the engine and its two fonts, which the publish put beside
+  the sample.
+- **The licence** is a file, mounted read-only, as on Windows.
+- **Fonts.** The image has none of its own, so documents are drawn in the two the package carries until you add
+  their families: the Dockerfile has the line to uncomment for Liberation's and Noto CJK's. The sample prints the
+  `Document.FontSubstitutions` of every document it converts.
 
 ## Showing documents in a browser
 
@@ -147,4 +182,5 @@ dotnet run -- --urls http://localhost:5000
 | Windows 11, x64, as a console program or a service | the worker model above; Windows 10 is expected to work, and is not yet tested |
 | Windows Server 2022 and 2025, x64 | tested: the package's own checks pass on both, from opening, changing and saving Word documents, spreadsheets and presentations to page images and PDF |
 | Windows containers, x64 | the full Windows Server image, `mcr.microsoft.com/windows/server:ltsc2022` or `:ltsc2025`, works. The smaller `mcr.microsoft.com/windows/servercore:ltsc2025` works from this version; 1.3.0 and earlier do not load in it. In `mcr.microsoft.com/windows/servercore:ltsc2022` documents open, change and save, but page images fail, and PDF is not tested there; use one of the others |
-| Linux, and Linux containers | not yet: the Linux package is not released |
+| Linux, x64, with glibc 2.34 or later | tested on Ubuntu 24.04, Debian 12 and Red Hat Enterprise Linux 9: the package's own checks pass on each, with nothing installed but .NET 8 and the distribution's libxml2 ([ComOffice on Linux](linux.md)) |
+| Linux containers, x64 | the sample's `Dockerfile.linux`, on Microsoft's .NET 8 runtime image (In a Linux container, above) |

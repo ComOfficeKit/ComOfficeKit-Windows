@@ -6,7 +6,8 @@
   of a picture on a sheet or a slide, or undo an edit
   ([The document model](object-model.md#what-the-model-does-not-do)).
 - **No printing to a printer**, and no UI control: the samples show how to put pages on screen.
-- **Windows x64 only**, .NET 8 or later. Not .NET Framework, not .NET on macOS or Linux.
+- **x64 Windows and Linux**, .NET 8 or later. Not .NET Framework, not .NET on macOS, not Arm64, and not
+  musl-based Linux such as Alpine ([ComOffice on Linux](linux.md)).
 - **PDF** is not written as PDF/A or tagged PDF, and is not encrypted, signed or given form fields
   ([Rendering and PDF](rendering-and-pdf.md)).
 
@@ -18,7 +19,8 @@
 - `Compare` compares body paragraphs and table cells, word by word. Not compared: formatting, headers,
   footers, footnotes, text boxes, pictures, comments. A document's own tracked changes are compared as
   accepted, and `CompareResult` says when there were any.
-- WMF and EMF pictures are drawn, as vectors: a WMF is converted to EMF first.
+- WMF and EMF pictures are drawn, as vectors: a WMF is converted to EMF first. On Linux they are left
+  out, as TIFF pictures are ([ComOffice on Linux](linux.md#what-differs-from-windows)).
 
 **Spreadsheets**
 - About 105 of Excel's functions are calculated; dynamic arrays are not ([Spreadsheets](spreadsheets.md)).

@@ -2,18 +2,45 @@
 
 ## Install
 
-The package is `ComOfficeKit`, for `net8.0` and later, on Windows x64.
+The package is `ComOfficeKit`, for `net8.0` and later, on x64 Windows and Linux.
 
-Each release attaches its package, a `.nupkg` file, to the release on GitHub. Put it in a folder and add
-that folder as a package source:
+Each release attaches its package, a `.nupkg` file, to the release on GitHub; it is not on nuget.org.
+Put it in a folder, `packages/` here:
 
 ```powershell
 Scripts/fetch-nupkg.ps1 -Tag <release tag>          # into packages/
-dotnet nuget add source "$PWD/packages" --name comofficekit-local
-dotnet add package ComOfficeKit
 ```
 
-The samples do the same through their `nuget.config`.
+On Linux, or without PowerShell, `curl` does the same: [ComOffice on
+Linux](linux.md#add-the-package-and-publish).
+
+Then a `nuget.config` beside your project takes ComOfficeKit from that folder alone and everything else
+from nuget.org, like the samples':
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <packageSources>
+    <clear />
+    <add key="comofficekit" value="packages" />
+    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+  </packageSources>
+  <packageSourceMapping>
+    <packageSource key="comofficekit">
+      <package pattern="ComOfficeKit" />
+    </packageSource>
+    <packageSource key="nuget.org">
+      <package pattern="*" />
+    </packageSource>
+  </packageSourceMapping>
+</configuration>
+```
+
+With the mapping, no other source can hand you a package of the same name. Add the release's version:
+
+```
+dotnet add package ComOfficeKit --version <version>
+```
 
 ## Activate
 
@@ -23,7 +50,7 @@ using ComOfficeKit;
 License.Activate(licenceKey);
 ```
 
-Activate once, before the first document. The activation is kept for the current Windows user, so
+Activate once, before the first document. The activation is kept for the current user, so
 the next start of your application finds it; [Licensing](licensing.md) has the choices. Until a
 licence is active, every operation on a document throws `LicenseException`.
 
@@ -44,9 +71,10 @@ for (int page = 0; page < document.PageCount; page++)
 document.ExportPdf(Path.ChangeExtension(args[1], ".pdf"));
 ```
 
-The engine is an x64 native DLL, so the process must be x64. On x64 Windows a .NET application is an
-x64 process by default. On Arm64 Windows, build with `<PlatformTarget>x64</PlatformTarget>` or publish
-for `win-x64`; an Arm64 process fails at the first call with `PlatformNotSupportedException`.
+The engine is an x64 native library, so the process must be x64. On x64 Windows and Linux a .NET
+application is an x64 process by default. On Arm64 Windows, build with
+`<PlatformTarget>x64</PlatformTarget>` or publish for `win-x64`; an Arm64 process fails at the first call
+with `PlatformNotSupportedException`. Arm64 Linux is not supported.
 
 ## The API at a glance
 

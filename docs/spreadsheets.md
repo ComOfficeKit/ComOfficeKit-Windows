@@ -58,7 +58,7 @@ book.Save();                 // to the file it was opened from, in its format
 book.SaveAs("figures.csv");  // .xlsx, .xlsm, .csv or .tsv, by the extension
 ```
 
-What the workbook holds and ComOfficeKit does not change is carried over as it was: charts,
+What the workbook holds and ComOffice does not change is carried over as it was: charts,
 pictures, pivot tables, and the macros of an `.xlsm`, which are kept and never run. A formula you
 typed is saved with its calculated value, so another application shows the value before it
 recalculates.

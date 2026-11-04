@@ -10,7 +10,7 @@ can find comes as `ComOfficeKitException`.
 | `ArgumentNullException`, `ArgumentException`, `ArgumentOutOfRangeException` | a value the API cannot take: a null or empty path, a cell name that is not A1 style, a DPI outside 24 to 600, a page past the last. The message names the argument and the rule, for example `dpi must be between 24 and 600 (was 1200)` |
 | `ObjectDisposedException` | any member of a document after `Dispose` |
 | `InvalidOperationException` | `Save()` on a document opened from a stream, which has no file to save to |
-| `PlatformNotSupportedException` | the process is not 64-bit Windows (x64) |
+| `PlatformNotSupportedException` | the process is not 64-bit Windows or Linux (x64) |
 | `LicenseException` | the licence does not allow it; `Error` says why ([Licensing](licensing.md)) |
 | `ComOfficeKitException` | everything else the engine reports; `Kind` says what kind |
 
@@ -18,7 +18,7 @@ can find comes as `ComOfficeKitException`.
 |---|---|
 | `InvalidArgument` | the engine refused a value, such as text a document cannot store, or a position the document does not have |
 | `IO` | a file could not be read or written |
-| `UnsupportedFormat` | not a file ComOfficeKit reads or writes |
+| `UnsupportedFormat` | not a file ComOffice reads or writes |
 | `Parse` | the file could not be read as its format |
 | `Unsupported` | not available for this document, or not where it was asked |
 | `License` | the exception is a `LicenseException` |

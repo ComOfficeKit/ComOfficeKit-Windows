@@ -1,0 +1,22 @@
+# This sample in a Linux container: docs/servers.md, "In a Linux container", builds and runs it.
+#
+# Publish the sample for linux-x64 into publish/, beside this file, before building. The publish puts the engine
+# and the two fonts the package carries beside the sample:
+#
+#   dotnet publish -c Release -r linux-x64 --self-contained false -o publish
+#   docker build -f Dockerfile.linux -t comofficekit-workers .
+#
+# Microsoft's .NET 8 runtime image is Debian 12; the engine needs the distribution's libxml2 besides.
+FROM mcr.microsoft.com/dotnet/runtime:8.0
+RUN apt-get update && apt-get install -y --no-install-recommends libxml2 && rm -rf /var/lib/apt/lists/*
+
+# The image has no fonts of its own: documents are drawn in Carlito and Caladea, which the package carries, until
+# their own families are installed. Liberation's have the widths of Arial, Times New Roman and Courier New; Noto
+# CJK draws Chinese, Japanese and Korean.
+# RUN apt-get update && apt-get install -y --no-install-recommends fonts-liberation2 fonts-noto-cjk && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY publish/ .
+
+# The arguments are the sample's: <input folder> <output folder> [workers] [seconds].
+ENTRYPOINT ["/app/Sample-ServerWorkers"]

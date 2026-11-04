@@ -1,4 +1,4 @@
-// Converts a document ComOfficeKit opens to a PDF and to a PNG of each page.
+// Converts a document ComOffice opens to a PDF and to a PNG of each page.
 //
 //   dotnet run -- <file> [output folder]
 //

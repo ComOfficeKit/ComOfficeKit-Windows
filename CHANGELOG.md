@@ -1,5 +1,40 @@
 # Changelog
 
+## 1.5.0
+
+**Linux.** The package now also runs on x64 Linux, with the same API: the Linux engine is in
+`runtimes/linux-x64/native`, beside the Windows one. It needs glibc 2.34 or later, .NET 8 and the
+distribution's libxml2; Ubuntu 24.04, Debian 12 and Red Hat Enterprise Linux 9 are tested, in clean
+images. [ComOffice on Linux](docs/linux.md) covers what the machine needs, publishing for `linux-x64`,
+activating, fonts, and what differs from Windows.
+
+- **Licences** name the platforms they cover, and one that does not cover Linux is refused there with
+  `LicenseError.PlatformMismatch`. On Linux the AppID is the activating assembly's name, as on Windows.
+  `LicenseStorage.Persistent` keeps an activation in a file only that user can read, not encrypted; on a
+  server, keep the licence in memory.
+- **Fonts:** Carlito and Caladea ship beside the Linux engine, with the widths of Calibri and Cambria, for
+  machines that lack a document's fonts. On Linux, `EngineOptions.FontDirectories` names folders to look
+  in first.
+- **Pictures:** on Linux, PNG, JPEG, GIF and BMP pictures are drawn; TIFF, EMF and WMF are left out of
+  page images and PDFs.
+- **Containers:** `Samples/Sample-ServerWorkers` gains `Dockerfile.linux`, on Microsoft's .NET 8 runtime
+  image, and [Running on a server](docs/servers.md) a section on Linux containers.
+- **The package** is about twice as large, 57 MB, as it carries both engines.
+
+**The name.** The SDK is now called ComOffice. The package, namespaces, types and file names keep
+`ComOfficeKit`, so nothing in your code or your project changes. Text the SDK writes says ComOffice
+where it said ComOfficeKit:
+
+- the messages of the exceptions it throws;
+- the licence errors' messages, which now start "ComOffice: ";
+- the `Producer` of every PDF the engine exports;
+- the API documentation.
+
+If your code reads a message's text, read `LicenseException.Error` or `ComOfficeKitException.Kind`
+instead: they have not changed.
+
+The API is unchanged.
+
 ## 1.4.0
 
 For running on a server: a guide and two samples, a working directory with a quota, cancelling a call,

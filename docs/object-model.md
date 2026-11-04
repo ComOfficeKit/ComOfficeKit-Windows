@@ -11,7 +11,7 @@ commands that the engine applies.
 [Sample-ObjectModel](../Samples/Sample-ObjectModel) edits a report, a workbook and a deck through the
 model, saves them, and reads the saved files back.
 
-The types carry the names of ComOfficeKit for Apple platforms, capitalised as .NET names are:
+The types carry the names of ComOffice for Apple platforms, capitalised as .NET names are:
 `WordParagraph`, `CellValue`, `SlideShape`. Code that works on the model reads the same on both.
 
 ## Reading
