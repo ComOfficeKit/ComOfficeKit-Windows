@@ -1,13 +1,14 @@
-# ComOffice for Windows
+# ComOffice for Windows and Linux
 
-**Word, Excel and PowerPoint files from .NET, on Windows and Linux.** Open `.docx`, `.xlsx`, `.xlsm`,
-`.pptx`, `.csv` and `.tsv` files, render their pages as images, export them as PDF, read and replace
-a document's text, compare two documents, read and write cells, and edit paragraphs, cells and slides
-through a document model — in your process, with a native engine that ships inside the package. No
-Microsoft Office, no LibreOffice, no server.
+**Word, Excel and PowerPoint files from .NET, on Windows and x64 Linux, in your apps and on your
+servers.** Open `.docx`, `.xlsx`, `.xlsm`, `.pptx`, `.csv` and `.tsv` files, render their pages as
+images, export them as PDF, read and replace a document's text, compare two documents, read and write
+cells, and edit paragraphs, cells and slides through a document model — in your process, with the
+native engines for both platforms inside the one package. No Microsoft Office, no LibreOffice, no
+network calls.
 
 > **Current release: 1.5.0** — what changed: [CHANGELOG](CHANGELOG.md). Its package,
-> `ComOfficeKit.1.5.0.nupkg` (56.9 MB), is attached to
+> `ComOfficeKit.1.5.0.nupkg` (56.9 MB, with the engines for Windows and Linux), is attached to
 > [the release](https://github.com/ComOfficeKit/ComOfficeKit-Windows/releases/tag/v1.5.0); `Scripts/fetch-nupkg.ps1 -Tag v1.5.0`
 > puts it in `packages/` for the samples.
 
