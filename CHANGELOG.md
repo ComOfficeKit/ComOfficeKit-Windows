@@ -1,5 +1,41 @@
 # Changelog
 
+## 1.6.0
+
+Documents are drawn more as Office draws them, in page images and PDFs. Pages can break differently from
+1.5.0, so a document's page count can change. The API is unchanged.
+
+**Spreadsheets**, on Windows and Linux unless a line says otherwise:
+
+- Rows that Excel sized to their contents keep the height Excel saved, and pages break where Excel's do.
+- A merged range's outline is drawn from the borders of the cells along each of its sides.
+- Shapes and text boxes on a sheet are drawn as they are on a slide: arrowheads, transparency, every stop of a
+  gradient, dashed outlines, shadows, underlined and vertical text, and text at 11 pt when no size is set.
+- Dotted and dashed cell borders are dotted and dashed, and medium dash-dot borders have their full width. On
+  Linux, page images still draw these borders solid; PDFs draw them dashed.
+- The 3 Symbols icon set draws its cross, exclamation mark and tick.
+- A formula that was saved without its result shows the value the engine calculates. The file is not changed.
+- On Windows, EMF and WMF pictures on a sheet are drawn where a grey box stood. On Linux they are still left out,
+  as 1.5.0 said.
+
+**Presentations**, on Windows and Linux:
+
+- A picture's border is drawn over the picture.
+- Pattern fills draw their pattern: stripes, diagonals, grids, or a percentage of the foreground colour.
+- A link is underlined in the theme's link colour, unless the file asks for the text's own colour.
+- A shape with no fill and no outline casts its shadow from its text.
+
+**East Asian vertical text**, on Windows and Linux: in text set vertically (`eaVert`), Chinese, Japanese and
+Korean characters stand upright, Latin letters and digits turn, columns run right to left, and punctuation takes
+its vertical form. This applies on slides and in text boxes on sheets.
+
+**Fonts, on Windows:**
+
+- A font named with its weight or width, such as Calibri Light, Arial Narrow or Segoe UI Semibold, is drawn in that
+  face.
+- A Mac or older East Asian family that Windows lacks is drawn in a Windows font of the same design, keeping the
+  original's line height. `Document.FontSubstitutions` reports the new stand-ins.
+
 ## 1.5.0
 
 **Linux.** The package now also runs on x64 Linux, with the same API: the Linux engine is in

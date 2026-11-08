@@ -40,7 +40,7 @@
 **Are my documents sent anywhere?** No. Everything happens in your process; the only files written are
 the ones you ask for, and temporary files for streams.
 
-**Why is `OfficeEngine.dll` 74 MB?** It carries everything it needs, so nothing has to be installed:
+**Why is `OfficeEngine.dll` 75 MB?** It carries everything it needs, so nothing has to be installed:
 the engine, its runtime, and the Unicode data for text in every language (about half of it).
 
 **Can two threads use one document?** Yes; they take turns. Different documents run in parallel

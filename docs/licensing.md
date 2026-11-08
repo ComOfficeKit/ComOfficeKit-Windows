@@ -108,6 +108,6 @@ with your application, beside the other notices it carries.
 
 ## Trial
 
-Each release's README publishes a free evaluation key, valid for about 60 days, that names no
+Each release's README publishes a free evaluation key, valid until 2027-01-01, that names no
 application: [Free trial and licence](../README.md#free-trial-and-licence). For a production licence
 or a quote, email sales@comofficekit.com.
