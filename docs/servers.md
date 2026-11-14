@@ -172,7 +172,10 @@ dotnet run -- --urls http://localhost:5000
   that opened it.
 - **What it refuses:** a file that is not .docx, .xlsx, .xlsm, .pptx, .csv or .tsv (400), a document the engine cannot
   read (422) or that passes the working directory's quota (413), and a call past its time limit (504). A request's
-  body is limited to 30,000,000 bytes, ASP.NET's default.
+  body is limited to 30,000,000 bytes, ASP.NET's default; a larger one is refused (413) with the limit in the answer.
+- **Its refusals carry the engine's own words.** A refusal's detail is the engine's message, which can name the
+  service's own files and the engine's parts: fine for trying the sample, not for a service other people use. Log
+  the message there, and answer in your own words.
 - **Before it faces the internet,** add your own sign-in: the sample has none.
 
 ## Platforms

@@ -14,7 +14,9 @@
 // call under a time limit and stopped when the browser goes away. A service with many users runs several processes
 // (docs/servers.md) and sends each document's requests to the process that opened it. There is no sign-in: add your
 // own before the service faces the internet.
+using System.Globalization;
 using ComOfficeKit;
+using Microsoft.AspNetCore.Http.Features;
 
 if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("COMOFFICEKIT_LICENSE_KEY"))
     && string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("COMOFFICEKIT_LICENSE_FILE")))
@@ -68,6 +70,16 @@ app.MapPost("/documents", async (HttpRequest request, string? name, Cancellation
         {
             await request.Body.CopyToAsync(stream, aborted);
         }
+    }
+    catch (BadHttpRequestException e) when (e.StatusCode == StatusCodes.Status413PayloadTooLarge)
+    {
+        // ASP.NET stops reading a body past its limit (30,000,000 bytes unless configured). Answered here, the page
+        // can say why, and the service's log keeps no error for what is the sender's mistake.
+        File.Delete(copy);
+        var most = request.HttpContext.Features.Get<IHttpMaxRequestBodySizeFeature>()?.MaxRequestBodySize;
+        return Results.Problem(most is { } bytes
+            ? $"The document is larger than this service accepts: at most {bytes.ToString("N0", CultureInfo.InvariantCulture)} bytes."
+            : "The document is larger than this service accepts.", statusCode: 413);
     }
     catch
     {
@@ -146,6 +158,8 @@ sealed class OpenDocuments : IDisposable
         }
         catch (ComOfficeKitException e)
         {
+            // The engine's own words, which can name this service's files: a sample's answer. A service for others
+            // logs them and answers in its own (docs/servers.md, "Showing documents in a browser").
             return Results.Problem(e.Message, statusCode: e.Kind switch
             {
                 ErrorKind.UnsupportedFormat or ErrorKind.Parse or ErrorKind.Unsupported => 422,

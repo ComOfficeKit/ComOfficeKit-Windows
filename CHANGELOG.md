@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.8.0
+
+ComOffice 1.7.0 was not released for Windows and Linux: its changes are here with 1.8.0's. Pages can break
+differently from 1.6.0, so a document's page count can change. The API is unchanged. The evaluation key in the
+README works until 2027-01-01.
+
+**Word documents**, on Windows and Linux:
+
+- Chinese, Japanese and Korean text in a font from Windows or Office, such as 新細明體, 標楷體, 宋体, 微軟正黑體 or
+  MS 明朝, is set at the line height Word gives it: 1.3 times the font's Windows height, where no document grid sets
+  the lines. Those lines were about 8 to 23 percent shorter than Word's, so such a document can now have more pages,
+  nearer Word's count.
+
+**Presentations**, on Windows and Linux:
+
+- Preset colours (`<a:prstClr>`, which PowerPoint writes for many shadows) are read wherever a deck uses them: in
+  shadows, text, fills and charts. Shadows, white text and black fills that were missing now appear.
+
+**Samples:**
+
+- Sample-WebViewer refuses an upload larger than ASP.NET's request limit with a 413 that states the limit.
+  [Running on a server](docs/servers.md) adds that a refusal carries the engine's own message, which can name your
+  service's files: log it, and answer your users in your own words.
+
 ## 1.6.0
 
 Documents are drawn more as Office draws them, in page images and PDFs. Pages can break differently from
