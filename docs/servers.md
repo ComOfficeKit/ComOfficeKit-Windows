@@ -55,7 +55,7 @@ License.Activate(licenceKey);                          // a secret the service i
 ### Cancelling a call
 
 Every call that can take long has an overload that takes a `CancellationToken`: `Document.Open`, `GetPageCount`,
-`RenderPage`, `ExportPdf`, `Save` and `SaveAs`. Cancel the token from any thread and the call throws
+`RenderPage`, `GetPageText`, `ExportPdf`, `Save` and `SaveAs`. Cancel the token from any thread and the call throws
 `OperationCanceledException` at its next check, with nothing changed: no document opened, no file replaced.
 
 ```csharp

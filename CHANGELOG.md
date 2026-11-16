@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.9.0
+
+A page's text, and where the page draws it, so an application can let its users select, copy and search over a
+page image. Pages lay out and draw as in 1.8.0, and nothing in the API changes or goes away. The evaluation key in
+the README works until 2027-01-01.
+
+**New API**, on Windows and Linux:
+
+- `Document.GetPageText(index)`, and an overload that takes a `CancellationToken`, returns the text a page draws and
+  where: the page's lines in the order it draws them, each with its text, box, baseline and rotation, and each
+  stretch of one size with every character's advance. It uses `RenderPage`'s pages and points, so it lies on the
+  page image. It holds headers and footers, footnotes and their marks, watermarks, chart labels and turned shapes'
+  text, and leaves out text a clip hides. It needs a licence that allows rendering.
+  [Rendering and PDF](docs/rendering-and-pdf.md#page-text) shows its coordinates.
+
+**Samples:**
+
+- The samples' source code is under the MIT License ([`Samples/LICENSE`](Samples/LICENSE)), so you may copy it into
+  your own code. The SDK they call is licensed as [`LICENSE.md`](LICENSE.md) says.
+
 ## 1.8.0
 
 ComOffice 1.7.0 was not released for Windows and Linux: its changes are here with 1.8.0's. Pages can break

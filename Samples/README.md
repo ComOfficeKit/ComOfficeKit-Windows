@@ -23,3 +23,8 @@ Linux](../docs/linux.md#add-the-package-and-publish)); Sample-WpfPreview needs W
 
 They take ComOfficeKit from `packages/` (see `nuget.config` and `Directory.Build.props` here) and build
 for x64, the engine's only architecture.
+
+## Licence
+
+The samples' source code is under the MIT License ([LICENSE](LICENSE)): copy it into your own code.
+The SDK they call is licensed separately ([LICENSE.md](../LICENSE.md)).

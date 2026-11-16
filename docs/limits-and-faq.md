@@ -29,7 +29,7 @@
 - PDF and page images are of the active sheet.
 
 **Presentations**
-- `PageCount` and `RenderPage` count hidden slides; `ExportPdf` leaves them out, as PowerPoint prints.
+- `PageCount`, `RenderPage` and `GetPageText` count hidden slides; `ExportPdf` leaves them out, as PowerPoint prints.
 
 ## FAQ
 

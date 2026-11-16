@@ -80,11 +80,12 @@ with `PlatformNotSupportedException`. Arm64 Linux is not supported.
 
 | Type | What it is |
 |---|---|
-| `Document` | an open file. `Open(path)`, `Open(stream, format)`, `CreateBlank(format, path)`; `Kind`, `Format`, `SourcePath`, `PageCount`, `RenderPage`, `ExportPdf`, `Save`, `SaveAs`, `Dispose` |
+| `Document` | an open file. `Open(path)`, `Open(stream, format)`, `CreateBlank(format, path)`; `Kind`, `Format`, `SourcePath`, `PageCount`, `RenderPage`, `GetPageText`, `ExportPdf`, `Save`, `SaveAs`, `Dispose` |
 | `WordDocument` | a `.docx`: `GetText()`, `ReplaceAll(find, replacement)`, and the static `Compare(original, revised, destination)`. The model: `GetScene`, `GetBody`, `BodyCount`, `GetComments`, `CommentCount`, `EditComment`, `SetCommentResolved`, `GetImageData`, `GetFloatingImageData`, `SceneEditor`, `Caret`, `SelectionAnchor`, `ModelRevision` |
 | `Spreadsheet` | a workbook: `SheetNames`, `ActiveSheet`, `GetCellText`, `GetCellInput`, `SetCellInput`. The model: `GetWorkbook`, `GetSheet`, `GetCells`, `GetCellCount`, `SceneEditor`, `SaveSync`, `ModelRevision` |
 | `Presentation` | a deck: `SlideCount`. The model: `GetSlides`, `GetSlide`, `GetLayouts`, `GetLayoutChoices`, `GetDefaultLayoutChoice`, `SceneEditor`, `ModelRevision` |
 | `PageImage` | a rendered page: `Width`, `Height`, `Stride`, `Dpi`, `Pixels` (BGRA32), `SavePng` |
+| `PageText` | a page's text and where it is drawn: `Width`, `Height`, `Text`, `Lines` (`PageTextLine`: `Text`, `X`, `Y`, `Width`, `Height`, `Baseline`, `Rotation`, `Spans`) |
 | `License` | `Activate`, `ActivateFromFile`, `Configure`, `Deactivate`, `State`, `LicensedTo`, `Expires`, `CheckUnlocked` |
 | `Engine` | `Version`: the native engine's version |
 

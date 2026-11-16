@@ -7,9 +7,9 @@ cells, and edit paragraphs, cells and slides through a document model — in you
 native engines for both platforms inside the one package. No Microsoft Office, no LibreOffice, no
 network calls.
 
-> **Current release: 1.8.0** — what changed: [CHANGELOG](CHANGELOG.md). Its package,
-> `ComOfficeKit.1.8.0.nupkg` (57.0 MB, with the engines for Windows and Linux), is attached to
-> [the release](https://github.com/ComOfficeKit/ComOfficeKit-Windows/releases/tag/v1.8.0); `Scripts/fetch-nupkg.ps1 -Tag v1.8.0`
+> **Current release: 1.9.0** — what changed: [CHANGELOG](CHANGELOG.md). Its package,
+> `ComOfficeKit.1.9.0.nupkg` (57.1 MB, with the engines for Windows and Linux), is attached to
+> [the release](https://github.com/ComOfficeKit/ComOfficeKit-Windows/releases/tag/v1.9.0); `Scripts/fetch-nupkg.ps1 -Tag v1.9.0`
 > puts it in `packages/` for the samples.
 
 ```csharp
@@ -56,7 +56,7 @@ document model in [The document model](docs/object-model.md).
 |---|---|
 | [Getting started](docs/getting-started.md) | install, activate, the first program, the API at a glance |
 | [Licensing](docs/licensing.md) | keys and licence files, where an activation is kept, the errors |
-| [Rendering and PDF](docs/rendering-and-pdf.md) | page images, DPI and sizes, showing pages in WPF and WinUI, PDF |
+| [Rendering and PDF](docs/rendering-and-pdf.md) | page images, DPI and sizes, showing pages in WPF and WinUI, page text, PDF |
 | [Spreadsheets](docs/spreadsheets.md) | sheets, cell names, reading and typing into cells, CSV |
 | [The document model](docs/object-model.md) | paragraphs, cells and slides as records, and the commands that edit them |
 | [Errors and threading](docs/errors-and-threading.md) | what is thrown when, threads, disposal, streams |

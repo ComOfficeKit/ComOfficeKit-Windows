@@ -49,6 +49,38 @@ using (var stream = bitmap.PixelBuffer.AsStream())
 bitmap.Invalidate();
 ```
 
+## Page text
+
+`GetPageText` returns the text a page draws and where it draws it: what an application lays over the
+page's image so its user can select, copy and search it, or reads to find where a word is on the page.
+
+```csharp
+PageText text = document.GetPageText(index: 0);
+foreach (PageTextLine line in text.Lines)
+{
+    Console.WriteLine($"{line.X:0.#}, {line.Baseline:0.#}: {line.Text}");
+}
+```
+
+- The pages and the points are `RenderPage`'s: lengths are in points (1/72 inch) from the page's
+  top-left corner, y growing down, so a point is `dpi` ÷ 72 pixels of the image drawn at `dpi`.
+  `Width` and `Height` are the page's.
+- It holds what the page draws as text: headers and footers, footnotes and their marks, a watermark,
+  a chart's labels, a turned shape's text. Text a clip hides, such as a cell's text past its cell, is
+  not in it.
+- `Lines` come in the order the page draws them: a Word page's text in reading order, then what lies
+  over it; a slide's shapes from back to front; a sheet's cells row by row, then its charts and
+  drawings. `Text` is every line's text, one to a line.
+- A line starts at (`X`, `Baseline`) and is turned `Rotation` degrees clockwise about that point: 0
+  for a level line, 90 for one that runs down the page. Its box, its spans and their advances are
+  given before the turn: lay them out unturned, then turn the whole line about its start.
+- A `PageTextSpan` is a stretch of a line in one size at one baseline, a superscript's or a
+  subscript's included. `Start` and `Length` index the line's `Text` in UTF-16 code units, and
+  `Advances` has one advance for each: the n-th code unit starts at the span's `X` plus the first n
+  advances.
+- A `PageText` owns its data and outlives its document. It needs a licence that allows rendering,
+  as `RenderPage` does, and an overload takes a `CancellationToken`.
+
 ## PDF
 
 ```csharp
