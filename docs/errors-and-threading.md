@@ -12,6 +12,7 @@ can find comes as `ComOfficeKitException`.
 | `InvalidOperationException` | `Save()` on a document opened from a stream, which has no file to save to |
 | `PlatformNotSupportedException` | the process is not 64-bit Windows or Linux (x64) |
 | `LicenseException` | the licence does not allow it; `Error` says why ([Licensing](licensing.md)) |
+| `ContentLossException` | a save as `.odt` would leave out comments, tracked changes or drawing shapes; `Loss` has the counts, and nothing was written ([OpenDocument text](getting-started.md#opendocument-text)) |
 | `ComOfficeKitException` | everything else the engine reports; `Kind` says what kind |
 
 | `ErrorKind` | Meaning |
@@ -23,6 +24,8 @@ can find comes as `ComOfficeKitException`.
 | `Unsupported` | not available for this document, or not where it was asked |
 | `License` | the exception is a `LicenseException` |
 | `EngineMismatch` | the native engine is missing, or is not the one the package ships ([Deployment](deployment.md)) |
+| `LimitExceeded` | a limit set with `Engine.Configure` would be passed; nothing was done ([Servers](servers.md)) |
+| `ContentLost` | the exception is a `ContentLossException` |
 | `Internal` | the engine failed unexpectedly; the message is the engine's |
 
 The engine's message is passed on unchanged.

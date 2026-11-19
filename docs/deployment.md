@@ -5,9 +5,9 @@
 | File | Size | What it is |
 |---|---|---|
 | `ComOfficeKit.dll` (and its `.xml` documentation) | about 500 KB | the .NET API, `net8.0` |
-| `OfficeEngine.dll` | about 75 MB | the native engine: everything it needs is linked in |
+| `OfficeEngine.dll` | about 76 MB | the native engine: everything it needs is linked in |
 | `vcruntime140.dll`, `vcruntime140_1.dll`, `msvcp140.dll` | about 0.9 MB | Microsoft's Visual C++ runtime, which the engine needs |
-| `libOfficeEngine.so`, and Carlito's and Caladea's font files | about 66 MB, and 3 MB of fonts | the native engine for Linux, and the two font families it carries |
+| `libOfficeEngine.so`, and Carlito's and Caladea's font files | about 67 MB, and 3 MB of fonts | the native engine for Linux, and the two font families it carries |
 
 The native files are in the package under `runtimes/win-x64/native` and `runtimes/linux-x64/native`.
 Nothing is installed on the machine. On Windows nothing is loaded from it except Windows itself; on

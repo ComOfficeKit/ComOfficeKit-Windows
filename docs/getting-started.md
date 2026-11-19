@@ -76,13 +76,31 @@ application is an x64 process by default. On Arm64 Windows, build with
 `<PlatformTarget>x64</PlatformTarget>` or publish for `win-x64`; an Arm64 process fails at the first call
 with `PlatformNotSupportedException`. Arm64 Linux is not supported.
 
+## OpenDocument text
+
+An `.odt` opens as a `WordDocument` and saves as `.odt` or `.docx`, from a path or a stream. OpenDocument
+text does not carry comments, tracked changes or drawing shapes here, so a save as `.odt` that would
+leave some out throws `ContentLossException` and writes nothing. Ask first, in your own words, and save
+again accepting it:
+
+```csharp
+using var doc = (WordDocument)Document.Open("minutes.odt");
+var loss = doc.GetContentLoss();   // Comments, TrackedChanges, Shapes
+if (loss.IsEmpty || UserAgrees(loss))
+{
+    doc.Save(new SaveOptions { AcceptContentLoss = !loss.IsEmpty });
+}
+```
+
+A save as `.docx` is never refused.
+
 ## The API at a glance
 
 | Type | What it is |
 |---|---|
-| `Document` | an open file. `Open(path)`, `Open(stream, format)`, `CreateBlank(format, path)`; `Kind`, `Format`, `SourcePath`, `PageCount`, `RenderPage`, `GetPageText`, `ExportPdf`, `Save`, `SaveAs`, `Dispose` |
-| `WordDocument` | a `.docx`: `GetText()`, `ReplaceAll(find, replacement)`, and the static `Compare(original, revised, destination)`. The model: `GetScene`, `GetBody`, `BodyCount`, `GetComments`, `CommentCount`, `EditComment`, `SetCommentResolved`, `GetImageData`, `GetFloatingImageData`, `SceneEditor`, `Caret`, `SelectionAnchor`, `ModelRevision` |
-| `Spreadsheet` | a workbook: `SheetNames`, `ActiveSheet`, `GetCellText`, `GetCellInput`, `SetCellInput`. The model: `GetWorkbook`, `GetSheet`, `GetCells`, `GetCellCount`, `SceneEditor`, `SaveSync`, `ModelRevision` |
+| `Document` | an open file. `Open(path)`, `Open(stream, format)`, `CreateBlank(format, path)`; `Kind`, `Format`, `SourcePath`, `PageCount`, `RenderPage`, `GetPageText`, `ExportPdf`, `Save`, `SaveAs` (each also with `SaveOptions`), `Dispose` |
+| `WordDocument` | a `.docx` or `.odt`: `GetText()`, `GetContentLoss()`, `ReplaceAll(find, replacement)`, and the static `Compare(original, revised, destination)`. The model: `GetScene`, `GetBody`, `BodyCount`, `GetComments`, `CommentCount`, `EditComment`, `SetCommentResolved`, `GetImageData`, `GetFloatingImageData`, `SceneEditor`, `Caret`, `SelectionAnchor`, `ModelRevision` |
+| `Spreadsheet` | a workbook: `SheetNames`, `ActiveSheet`, `GetCellText`, `GetCellInput`, `SetCellInput`, `PasteHtml`, `Copy`. The model: `GetWorkbook`, `GetSheet`, `GetCells`, `GetCellCount`, `SceneEditor`, `SaveSync`, `ModelRevision` |
 | `Presentation` | a deck: `SlideCount`. The model: `GetSlides`, `GetSlide`, `GetLayouts`, `GetLayoutChoices`, `GetDefaultLayoutChoice`, `SceneEditor`, `ModelRevision` |
 | `PageImage` | a rendered page: `Width`, `Height`, `Stride`, `Dpi`, `Pixels` (BGRA32), `SavePng` |
 | `PageText` | a page's text and where it is drawn: `Width`, `Height`, `Text`, `Lines` (`PageTextLine`: `Text`, `X`, `Y`, `Width`, `Height`, `Baseline`, `Rotation`, `Spans`) |

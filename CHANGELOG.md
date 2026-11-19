@@ -1,5 +1,57 @@
 # Changelog
 
+## 1.12.0
+
+OpenDocument text, and copy and paste in workbooks. ComOffice 1.10.0 to 1.11.1 were not released for
+Windows and Linux: their changes are here with 1.12.0's. Pages can break differently from 1.9.0, so a
+document's page count can change. Nothing in the API changes or goes away. The evaluation key in the
+README works until 2027-01-01.
+
+**New API**, on Windows and Linux:
+
+- **OpenDocument text.** An `.odt` opens as a `WordDocument` (`DocumentFormat.Odt`), from a path or a
+  stream, and saves as `.odt` or `.docx`. OpenDocument text does not carry comments, tracked changes or
+  drawing shapes here, so a save as `.odt` that would leave some out throws `ContentLossException`
+  (`ErrorKind.ContentLost`) and writes nothing; its `Loss` has the counts. `WordDocument.GetContentLoss()`
+  reads them before you save, so you can ask in your own words, and `Save` and `SaveAs` with
+  `SaveOptions { AcceptContentLoss = true }` write anyway. A save as `.docx` is never refused.
+  [Getting started](docs/getting-started.md#opendocument-text) shows it.
+- **Copy and paste in workbooks.** `Spreadsheet.PasteHtml(sheet, cell, html, text)` pastes what a
+  clipboard holds: a table copied from Excel, Google Sheets or a web page comes in with its values,
+  formats and merged cells, and text pastes as typing. `Spreadsheet.Copy(sheet, range)` returns a range
+  as text and as an HTML table (`CopiedRange`), and pasting that text again brings the cells back,
+  formulas included. [Spreadsheets](docs/spreadsheets.md#copy-and-paste) shows it.
+
+**All documents:**
+
+- **Parts found the way the file names them.** Files that name their parts by absolute paths, as
+  Microsoft's own templates do, lost what those parts hold: a document its styles, numbering, headers
+  and footers; a workbook its charts, tables, pivot tables and theme colours; a deck its layouts, masters
+  and themes. They are read now, and kept on save. In one such workbook, cells typed before a save read
+  back as other text after it; that no longer happens.
+
+**Word documents:**
+
+- **Page colour.** A document's page colour (Word's Design ▸ Page Color) fills every page in page
+  images and in PDF, and a save keeps it.
+- **Pages:** a table row that fits a page but not what is left of this one breaks at the page's foot, as
+  Word breaks it, keeping two lines of a paragraph on each side; a row that may not split but is taller
+  than a page starts a new page and carries on, where it was cut off; a picture on a line spaced at a
+  multiple of single is given that multiple of its text's height; moved text that is tracked shows as a
+  deletion and an insertion; lines in 仿宋 (FangSong) are as tall as Word sets them.
+
+**Spreadsheets:**
+
+- **Saving keeps more of the file:** a column's style, best-fit and outline attributes; cells you did not
+  edit, as the file had them; a chart's cached values, updated
+  when you change the cells it draws.
+- **New functions:** `SUMIFS`, `COUNTIFS`, `AVERAGEIFS`, `MAXIFS`, `MINIFS` and `HYPERLINK`.
+
+**Presentations:**
+
+- A shape's text takes its style's font colour, and pictures draw their transparency, duotone and
+  greyscale, in page images and in PDF.
+
 ## 1.9.0
 
 A page's text, and where the page draws it, so an application can let its users select, copy and search over a

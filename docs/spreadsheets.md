@@ -51,6 +51,23 @@ Number formats, fonts, fills, borders and alignment, inserting and deleting rows
 tables are edited through the document model's `SceneEditor` ([The document
 model](object-model.md#workbooks)).
 
+## Copy and paste
+
+`PasteHtml` pastes what a clipboard holds. A table copied from Excel, Google Sheets or a web page comes
+in with its values typed, and with its bold, italic, underline, colours, fills, alignment and merged
+cells; when there is no table, the text pastes as typing, a tab between cells and a line for each row.
+`Copy` gives a range back as text and as an HTML table for the clipboard, and pasting that text again
+brings the cells themselves, formulas included, each relative reference moved as far as the cells moved:
+
+```csharp
+var source = book.PasteHtml(book.ActiveSheet, "A1", clipboardHtml, clipboardText);  // Html, Text, Own or None
+var copied = book.Copy(book.ActiveSheet, "A1:C10");                                 // copied.Text, copied.Html
+```
+
+Whatever depends on the pasted cells recalculates. The HTML may be a fragment, a whole page, or the
+Windows clipboard's HTML format with its `Version:` header. A paste Excel would refuse, over a PivotTable
+for one, throws `ComOfficeKitException` with `ErrorKind.InvalidArgument` and Excel's reason.
+
 ## Saving
 
 ```csharp
@@ -74,8 +91,8 @@ recalculates.
 
 ## The formula engine
 
-About 105 of Excel's functions are calculated: arithmetic, statistics, text, dates, logic and lookups
-(`SUM`, `AVERAGE`, `IF`, `VLOOKUP`, `INDEX`, `MATCH`, `TEXT`, `DATE`, ...). A formula shows the value
+About 110 of Excel's functions are calculated: arithmetic, statistics, text, dates, logic and lookups
+(`SUM`, `AVERAGE`, `SUMIFS`, `COUNTIFS`, `IF`, `VLOOKUP`, `INDEX`, `MATCH`, `TEXT`, `DATE`, ...). A formula shows the value
 saved in the file until a cell it depends on changes; then it is calculated. A function outside that
 set calculates to `#NAME?`, as Excel shows for a function it does not know. Dynamic arrays are not
 calculated.
