@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.12.1
+
+A fix for a crash. A formula that gives a function too few arguments (`SUMIF`, `AVERAGEIF`, `COUNTIF` or
+`MATCH` with fewer than two, `INDEX` or `INDIRECT` with none, `RANK` with one) ended the process that held
+the workbook: when `SetCellInput` or `SaveSync` typed it into a cell, when a workbook was opened whose file
+had no saved result for it, and when a cell it reads changed. It was not an exception, so no `catch` saw it.
+Every earlier release has it, so one such file could stop a server that opens workbooks from outside. Such a
+formula is now `#VALUE!`, as other functions are when given too few arguments. Nothing in the API changes,
+and pages lay out as in 1.12.0. The evaluation key in the README works until 2027-01-01.
+
 ## 1.12.0
 
 OpenDocument text, and copy and paste in workbooks. ComOffice 1.10.0 to 1.11.1 were not released for
