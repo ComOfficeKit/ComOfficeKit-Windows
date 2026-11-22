@@ -7,9 +7,9 @@ cells, and edit paragraphs, cells and slides through a document model — in you
 native engines for both platforms inside the one package. No Microsoft Office, no LibreOffice, no
 network calls.
 
-> **Current release: 1.12.1** — what changed: [CHANGELOG](CHANGELOG.md). Its package,
-> `ComOfficeKit.1.12.1.nupkg` (57.8 MB, with the engines for Windows and Linux), is attached to
-> [the release](https://github.com/ComOfficeKit/ComOfficeKit-Windows/releases/tag/v1.12.1); `Scripts/fetch-nupkg.ps1 -Tag v1.12.1`
+> **Current release: 1.13.0** — what changed: [CHANGELOG](CHANGELOG.md). Its package,
+> `ComOfficeKit.1.13.0.nupkg` (57.9 MB, with the engines for Windows and Linux), is attached to
+> [the release](https://github.com/ComOfficeKit/ComOfficeKit-Windows/releases/tag/v1.13.0); `Scripts/fetch-nupkg.ps1 -Tag v1.13.0`
 > puts it in `packages/` for the samples.
 
 ```csharp

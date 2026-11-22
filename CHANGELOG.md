@@ -1,5 +1,38 @@
 # Changelog
 
+## 1.13.0
+
+Faster saves, two fixes for text lost in Word documents, and a presentation's groups in the document model.
+Nothing in the API changes or goes away. The evaluation key in the README works until 2027-01-01.
+
+**New API**, on Windows and Linux:
+
+- **Groups in presentations.** `SlideScene.Groups` lists a slide's groups, outermost first, each a `SlideGroup`
+  with its `Id`, its `ParentID`, its `Frame` on the slide and `IsRotatedOrFlipped`. `SlideShape.GroupPath` names
+  the groups a shape sits in, outermost first. In this version they can be read, not changed:
+  `PresentationSceneEditor.ReplacingFrame` still does not move a shape that is inside a group.
+
+**All documents:**
+
+- **Saving is faster.** A save now copies the parts of the file it did not change as they are, instead of
+  unpacking and packing every part again. It no longer compresses pictures, fonts, video and audio a second
+  time, and it writes the file as it goes rather than building it in memory. A save after one edit measured 3 to
+  4.5 times faster on Windows.
+- **A save that would pass 4 GB throws and writes nothing.** Before, it ended the process.
+- **An encrypted or ZIP64 package says so.** A document with an encrypted part, or one written as ZIP64, is
+  refused when it is opened (`ComOfficeKitException`, `ErrorKind.Parse`, as before), and the message now names
+  the reason; before, it said only that the file could not be decoded or was corrupt.
+
+**Word documents:**
+
+- **Text typed right after an inline picture is saved.** When `WordDocument.SceneEditor.Insert` put text where
+  the caret stood right after a picture (a picture alone in its paragraph, or at a paragraph's end), the text
+  went into the picture's run and was dropped on save, with no error, and the picture was written again as a new
+  one. The text now goes into a run of its own after the picture, and the picture keeps its XML.
+- **A document whose WordprocessingML is not bound to the `w:` prefix** (Python's ElementTree writes `ns0:`, for
+  one) was saved as XML that was not well-formed after any edit: Word refused the file, and the edited paragraph
+  lost its text when the file was read again. It now saves well-formed.
+
 ## 1.12.1
 
 A fix for a crash. A formula that gives a function too few arguments (`SUMIF`, `AVERAGEIF`, `COUNTIF` or
