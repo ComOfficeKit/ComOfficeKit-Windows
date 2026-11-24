@@ -1,5 +1,36 @@
 # Changelog
 
+## 1.14.0
+
+Faster workbook saves, three fixes in saved workbooks, saves that leave other documents free, and shapes inside
+presentation groups that move. Nothing in the API changes or goes away. The evaluation key in the README works until
+2027-01-01.
+
+**Workbooks:**
+
+- **Saving is faster.** A save leaves every sheet nobody edited exactly as the file had it, and in an edited sheet
+  writes only the rows whose cells changed, copying everything else as it is; a later save after more edits does the
+  same. On Linux, with a workbook of two sheets of 40,000 and 20,000 rows of numbers, a save after one edit took 0.24
+  to 0.43 s instead of 2.2 to 2.5 s, and a save with no edit about 0.1 s instead of 2 s.
+- **Conditional formatting over a `$` range is kept.** A rule whose range uses `$` (as in `$A33:$XFD33`) was not
+  read, so every save that wrote its sheet dropped it.
+- **A workbook whose SpreadsheetML is bound to a prefix** (`<x:worksheet>`, as some tools write it): a cell or a style
+  that a save added was written in no namespace, so Excel did not read it. What a save adds now takes the part's
+  prefix.
+- **A cell's style is no longer added again on each save.** Each save that wrote a cell's row appended the cell's
+  `<xf>` to the styles once more.
+
+**Presentations:**
+
+- **Shapes inside groups move.** `PresentationSceneEditor.ReplacingFrame` now moves and resizes a shape inside a
+  group, and the save writes it into its group, which grows or shrinks to hold its shapes. A shape in a rotated or
+  flipped group, or in SmartArt, is still refused.
+
+**All documents:**
+
+- **A save leaves other documents free.** While one document is being saved, other documents can be opened, laid out
+  and drawn on other threads; a call on the document being saved still waits for its save.
+
 ## 1.13.0
 
 Faster saves, two fixes for text lost in Word documents, and a presentation's groups in the document model.
