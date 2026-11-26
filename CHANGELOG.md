@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.16.0
+
+Flipped shapes, and flipped or rotated groups, in presentations are drawn as PowerPoint draws them. Three properties
+are added; nothing in the API changes or goes away. The evaluation key in the README works until 2027-01-01.
+
+**New API**, on Windows and Linux:
+
+- **`SlideShape.FlipH` and `SlideShape.FlipV`:** the shape is drawn mirrored, left to right or top to bottom, about
+  its frame's centre, before its turn. **`SlideShape.TextIsUpsideDown`:** its text is drawn upside down, which is a
+  top-to-bottom flip on any shape but a SmartArt label. A line keeps its flips in its connector, as before.
+
+**Presentations:**
+
+- **A flipped or rotated group takes its shapes with it.** A shape inside such a group now has, in the model, the
+  frame and turn PowerPoint gives it: its centre goes where the group's flip and turn take it, its own turn composes
+  with the group's, and groups inside groups compose too. Until now such a shape was drawn, and reported, where it
+  would be if its group were neither flipped nor turned. `PresentationSceneEditor.ReplacingFrame` still refuses a
+  shape in a rotated or flipped group.
+- **A shape flipped on its own is drawn mirrored:** an arrow points the other way, a picture is mirrored. Text is
+  never mirrored: a shape flipped top to bottom has its text upside down, except a SmartArt label. A shadow is not
+  flipped with its shape, and a table or a chart is never mirrored.
+- Checked against PowerPoint on 12 slides of flipped, rotated and nested groups: every shape's position, size and
+  turn equal PowerPoint's.
+
 ## 1.14.0
 
 Faster workbook saves, three fixes in saved workbooks, saves that leave other documents free, and shapes inside
